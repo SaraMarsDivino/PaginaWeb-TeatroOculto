@@ -1,0 +1,58 @@
+[
+  {
+    "model": "web.obra",
+    "pk": 1,
+    "fields": {
+      "title": "Sobre el daño que causa del tabaco",
+      "synopsis": "En esta adaptación libre del texto de Antón Chéjov, la obra se presenta como una conferencia aparentemente informativa sobre los daños que causa el tabaco, dictada por un hombre mayor convocado más por obediencia familiar que por verdadera vocación. A medida que el discurso avanza, la conferencia se fragmenta y deja al descubierto la fragilidad emocional del personaje, su relación distante con su hijo y una profunda sensación de soledad e incomunicación. El relato transita entre el humor, la nostalgia y la reflexión, incorporando quiebres escénicos y recursos del teatro gestual que transforman la charla en un viaje íntimo hacia la necesidad humana de ser escuchado.\n\nTrabajar con un autor fundamental de la literatura universal y referente clave en la formación teatral representa tanto un privilegio como un desafío artístico. Esta versión propone volver a convocar a Chéjov desde una mirada fresca, rescatando la profundidad de su escritura y actualizando sus temas para dialogar con el presente. La adaptación busca generar un puente intergeneracional, conectando especialmente con una población adulta mayor en crecimiento, sin dejar de interpelar a jóvenes audiencias, invitándolas a reflexionar sobre la comunicación, la escucha y los vínculos humanos en la sociedad actual.",
+      "poster_image": "obras/retrato-dramatico-chejov.png",
+      "release_date": "2026-04-01",
+      "created_at": "2025-01-10T10:00:00Z",
+      "active": true
+    }
+  },
+  {
+    "model": "web.obra",
+    "pk": 2,
+    "fields": {
+      "title": "Al Caer la Noche",
+      "synopsis": "Presentación en colaboración con Laboratorio Ecoanónimo.",
+      "release_date": "2025-06-20",
+      "created_at": "2025-02-01T10:00:00Z",
+      "active": false
+    }
+  },
+  {
+    "model": "web.iniciativa",
+    "pk": 1,
+    "fields": {
+      "title": "Función de “Al Caer la Noche” — Obra de teatro performance.",
+      "description": "Obra de teatro performance realizada por laboratorio ecoanonimo e Ignacio Romero en el vagón multi espacio, junto con ejecución de estudio de público.",
+      "image": "iniciativas/al-caer-la-noche.jpg",
+      "category": "Formación",
+      "created_at": "2025-01-10T10:00:00Z"
+    }
+  },
+  {
+    "model": "web.iniciativa",
+    "pk": 3,
+    "fields": {
+      "title": "Taller de Teatro Performance",
+      "description": "Taller orientado a explorar la performance y el entrenamiento actoral.",
+      "image": "iniciativas/teatro-perfomance.png",
+      "category": "Formación",
+      "created_at": "2025-01-11T10:00:00Z"
+    }
+  },
+  {
+    "model": "web.iniciativa",
+    "pk": 2,
+    "fields": {
+      "title": "Gestión de funciones: Algo de Ricardo",
+      "description": "Gestión y presentación de funciones en Multiespacio El Vagón.",
+      "image": "iniciativas/gestion-de-funciones-algo-de-ricardo.jpg",
+      "category": "Comunidad",
+      "created_at": "2025-05-01T12:00:00Z"
+    }
+  }
+]

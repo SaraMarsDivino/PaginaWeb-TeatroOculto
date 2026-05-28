@@ -1,0 +1,109 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import ContactForm from '@/components/react/ContactForm';
+---
+
+<BaseLayout
+  title="Contacto — Teatro Oculto"
+  description="Contáctate con Teatro Oculto para consultas sobre funciones, talleres o colaboraciones."
+>
+  <Navbar slot="navbar" />
+
+  <section class="section pt-16 pb-28">
+    <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+      <!-- Left: Info -->
+      <div>
+        <p class="section-title">Hablemos</p>
+        <h1 class="section-heading mb-3">Contáctanos</h1>
+        <div class="gold-bar"></div>
+
+        <p class="mt-7 text-sm text-white/55 leading-relaxed max-w-md">
+          ¿Tienes preguntas sobre nuestras obras, quieres organizar una función,
+          o simplemente deseas conectar con nosotros? Escríbenos.
+        </p>
+
+        <!-- Contact items -->
+        <div class="mt-10 space-y-5">
+          {[
+            {
+              icon: `<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.4"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.4"/>`,
+              label: 'Correo',
+              value: 'gestion@teatrooculto.cl',
+              href: 'mailto:gestion@teatrooculto.cl',
+            },
+            {
+              icon: `<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.4"/>`,
+              label: 'Sede',
+              value: 'La Calera, Región de Valparaíso',
+              href: null,
+            },
+          ].map((item) => (
+            <div class="flex items-start gap-4">
+              <div
+                class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+                style="background: rgba(224,66,66,0.1); border: 1px solid rgba(224,66,66,0.18);"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-crimson">
+                  <Fragment set:html={item.icon} />
+                </svg>
+              </div>
+              <div>
+                <p class="text-[10px] font-black uppercase tracking-theater text-white/35 mb-0.5">{item.label}</p>
+                {item.href ? (
+                  <a href={item.href} class="text-sm text-white/75 hover:text-white transition-colors">
+                    {item.value}
+                  </a>
+                ) : (
+                  <p class="text-sm text-white/75">{item.value}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Social -->
+        <div class="mt-10">
+          <p class="text-[10px] font-black uppercase tracking-theater text-white/35 mb-4">Redes sociales</p>
+          <div class="flex gap-3">
+            <a
+              href="https://www.instagram.com/teatro.oculto_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/25 hover:bg-white/04 text-sm text-white/70 hover:text-white transition-all"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+              </svg>
+              Instagram
+            </a>
+            <a
+              href="https://www.facebook.com/people/Teatro-Oculto/61588505524109/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/25 hover:bg-white/04 text-sm text-white/70 hover:text-white transition-all"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.7.3-1 1-1z" fill="currentColor"/>
+              </svg>
+              Facebook
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="card-glass p-8 lg:p-10">
+        <h2 class="text-xl font-black text-white mb-1">Envíanos un mensaje</h2>
+        <p class="text-xs text-white/40 mb-8">Respondemos a la brevedad.</p>
+        <ContactForm client:load />
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0f16"/>
+      <stop offset="1" stop-color="#131a26"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="#d7b36a" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.18">
+    <rect x="180" y="140" width="1240" height="620" rx="28"/>
+    <path d="M260 650 L560 430 L820 610 L1120 360 L1340 520" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="520" cy="330" r="44" stroke-width="10"/>
+  </g>
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" fill="#ffffff" fill-opacity="0.68">
+    <text x="50%" y="54%" text-anchor="middle" font-size="42" font-weight="700" letter-spacing="6">TEATRO OCULTO</text>
+    <text x="50%" y="60%" text-anchor="middle" font-size="20" letter-spacing="4">IMAGEN NO DISPONIBLE</text>
+  </g>
+</svg>

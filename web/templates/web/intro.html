@@ -1,0 +1,73 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block title %}Intro — Teatro Oculto{% endblock %}
+
+{% block content %}
+<style>
+  :root{ --intro-overlay: rgba(0,0,0,0.45); }
+  .intro-hero { height: 100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .intro-overlay { position:absolute; inset:0; background: linear-gradient(0deg, var(--intro-overlay), rgba(0,0,0,0.1)); z-index:2; }
+  .intro-content { z-index:3; text-align:center; color:#fff; pointer-events:none; padding: 1rem; }
+  .video-placeholder { position:absolute; inset:0; background: #000 center/cover no-repeat; filter: brightness(0.6); z-index:1; }
+
+  .intro-brand-tr { position:absolute; top: 20px; right: 20px; z-index:4; pointer-events:auto; }
+  .intro-brand-tr img { height: 44px; width:auto; display:block; filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45)); }
+
+  .intro-isotipo { display:block; margin: 0 auto 1rem; width: min(42vw, 240px); height:auto; filter: drop-shadow(0 10px 26px rgba(0,0,0,0.55)); }
+  /* Skip button hidden by default, shown on hover/focus/touch */
+  .skip-btn { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); z-index:4; opacity:0; transition:opacity .22s ease, transform .22s ease; pointer-events:none; }
+  .intro-hero:hover .skip-btn, .intro-hero.show-skip .skip-btn, .skip-btn:focus { opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+  .skip-btn a{ pointer-events:auto; }
+  /* ensure button is accessible on small screens when touched */
+  @media (hover: none) {
+    .skip-btn{ opacity:0.01; }
+  }
+</style>
+
+<div class="intro-hero rounded">
+  <a class="intro-brand-tr" href="{% url 'home' %}" aria-label="Ir a inicio">
+    <img src="{% static 'web/brand/logo.png' %}" alt="Teatro Oculto">
+  </a>
+
+  <!-- Video background (detected dynamically) -->
+  {% if video_url %}
+    <video id="intro-video" class="w-100 h-100 position-absolute" muted playsinline preload="none" poster="{{ poster_url }}" style="object-fit:cover; z-index:1; top:0; left:0;">
+      <source src="{{ video_url }}" type="video/mp4">
+    </video>
+  {% else %}
+    <div class="video-placeholder" style="background-image:url('{{ poster_url }}');"></div>
+  {% endif %}
+  <div class="intro-overlay"></div>
+
+  <div class="intro-content">
+    <img class="intro-isotipo" src="{% static 'web/brand/isotipo.png' %}" alt="Isotipo Teatro Oculto" decoding="async">
+    <h1 class="display-6 fw-bold mb-2">Teatro Oculto</h1>
+    <p class="lead mb-0">El teatro emerge para encontrarnos</p>
+
+    <div class="intro-actions mt-4 d-flex justify-content-center gap-3">
+      <div class="skip-btn">
+        <a href="{% url 'skip_intro' %}" class="btn btn-outline-theme btn-lg" role="button" aria-label="Saltar intro">Saltar Intro</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // show skip button on touch devices when tapped
+  (function(){
+    const hero = document.querySelector('.intro-hero');
+    if(!hero) return;
+    hero.addEventListener('touchstart', function(){
+      hero.classList.add('show-skip');
+      // hide after 4 seconds
+      setTimeout(()=> hero.classList.remove('show-skip'), 4000);
+    }, {passive:true});
+    // keyboard accessibility: show skip when video focused
+    const video = document.getElementById('intro-video');
+    if(video){
+      video.setAttribute('tabindex','0');
+      video.addEventListener('focus', ()=> hero.classList.add('show-skip'));
+      video.addEventListener('blur', ()=> hero.classList.remove('show-skip'));
+    }
+  })();
+</script>
+{% endblock %}

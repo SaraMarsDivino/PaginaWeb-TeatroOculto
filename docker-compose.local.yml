@@ -1,0 +1,19 @@
+# Local (Windows-friendly) compose overrides.
+#
+# Uses nginx (HTTP-only) but avoids binding host ports 80/443.
+# Access the site via: http://127.0.0.1:8000/
+services:
+  web:
+    # Use project-local folders for static/media on local machines.
+    volumes:
+      - ./:/app:rw
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+
+  nginx:
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx/teatro.local.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./staticfiles:/app/staticfiles:ro
+      - ./media:/app/media:ro

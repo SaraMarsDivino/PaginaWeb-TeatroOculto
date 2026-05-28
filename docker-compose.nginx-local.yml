@@ -1,0 +1,38 @@
+# Standalone local stack (Windows-friendly): nginx -> web
+#
+# Why:
+# - Avoids binding host ports 80/443 (often already taken on Windows)
+# - Avoids production TLS cert mounts
+#
+# Usage:
+#   docker compose -f docker-compose.nginx-local.yml up -d --build
+#   open http://127.0.0.1:8000/
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    command: gunicorn teatro_project.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    volumes:
+      - ./:/app:rw
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    expose:
+      - "8000"
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx/teatro.local.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./staticfiles:/app/staticfiles:ro
+      - ./media:/app/media:ro

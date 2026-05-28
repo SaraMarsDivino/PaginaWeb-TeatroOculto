@@ -1,0 +1,140 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import SpotlightHero from '@/components/react/SpotlightHero';
+import HeroCarousel from '@/components/react/HeroCarousel';
+import { getCollection } from 'astro:content';
+
+const obras = await getCollection('obras', ({ data }) => data.active);
+const iniciativas = await getCollection('iniciativas');
+const sortedIniciativas = iniciativas.sort((a, b) => a.data.order - b.data.order).slice(0, 2);
+
+// Carousel images — add your images to public/images/carousel/
+const carouselItems = [
+  { src: '/images/carousel/ensayo 1.jpg', thumb: '/images/carousel/thumbs/ensayo 1.jpg' },
+  { src: '/images/carousel/ensayo 2.jpg', thumb: '/images/carousel/thumbs/ensayo 2.jpg' },
+  { src: '/images/carousel/pisopapel.JPG', thumb: '/images/carousel/thumbs/pisopapel.JPG' },
+  { src: '/images/carousel/telon verde.JPG', thumb: '/images/carousel/thumbs/telon verde.JPG' },
+].filter(Boolean);
+---
+
+<BaseLayout title="Teatro Oculto — Inicio">
+  <Navbar slot="navbar" />
+
+  <!-- 1. Hero with spotlight -->
+  <SpotlightHero client:load />
+
+  <!-- 2. Carousel -->
+  <section class="section pt-0 pb-24" aria-label="Imágenes de ensayo">
+    <div class="mb-6 flex items-center gap-4">
+      <span class="section-title">Nuestro trabajo</span>
+      <div class="gold-bar flex-grow" style="max-width: 80px;"></div>
+    </div>
+    <HeroCarousel client:visible items={carouselItems} />
+  </section>
+
+  <!-- 3. Iniciativas preview -->
+  <section class="section py-24 border-t border-white/04" aria-label="Iniciativas">
+    <div class="flex items-end justify-between mb-10 flex-wrap gap-4">
+      <div>
+        <p class="section-title">Ejes de trabajo</p>
+        <h2 class="section-heading">Iniciativas</h2>
+      </div>
+      <a href="/iniciativas" class="btn-ghost text-xs">Ver todas →</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {sortedIniciativas.map((ini) => (
+        <a href="/iniciativas" class="card-glass block group" aria-label={`Ver iniciativa: ${ini.data.title}`}>
+          <div class="overflow-hidden rounded-t-2xl" style="height: 200px;">
+            <img
+              src={ini.data.image}
+              alt={ini.data.title}
+              class="card-img w-full h-full object-cover"
+              style="height: 200px;"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='/images/placeholder-photo.svg';"
+            />
+          </div>
+          <div class="p-6">
+            <span class="text-[10px] font-black uppercase tracking-theater text-white/35 block mb-2">
+              {ini.data.category}
+            </span>
+            <h3 class="text-lg font-bold text-white mb-2">{ini.data.title}</h3>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 4. Obras preview -->
+  <section class="section py-24 border-t border-white/04" aria-label="Obras">
+    <div class="flex items-end justify-between mb-10 flex-wrap gap-4">
+      <div>
+        <p class="section-title">En escena</p>
+        <h2 class="section-heading">Obras</h2>
+      </div>
+      <a href="/obras" class="btn-ghost text-xs">Ver todas →</a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {obras.slice(0, 2).map((obra) => (
+        <a href="/obras" class="card-glass block group">
+          <div class="overflow-hidden rounded-t-2xl" style="height: 240px;">
+            <img
+              src={obra.data.poster}
+              alt={`Afiche — ${obra.data.title}`}
+              class="card-img w-full h-full object-cover"
+              style="height: 240px;"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='/images/placeholder-poster.svg';"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-white mb-2">{obra.data.title}</h3>
+            <p class="text-sm text-white/50 line-clamp-2 leading-relaxed">
+              {obra.data.synopsis.split('\n')[0]}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 5. Newsletter -->
+  <section class="section py-24 border-t border-white/04" aria-label="Newsletter">
+    <div
+      class="relative overflow-hidden rounded-3xl border border-white/06 px-8 py-14 text-center"
+      style="background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(224,66,66,0.14), transparent 60%), rgba(255,255,255,0.02);"
+    >
+      <div class="grain" aria-hidden="true"></div>
+      <div class="relative z-10">
+        <p class="section-title justify-center flex">Mantente al tanto</p>
+        <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">Suscríbete al boletín</h2>
+        <p class="text-sm text-white/50 max-w-md mx-auto mb-8">
+          Recibe novedades sobre funciones, talleres y actividades de Teatro Oculto.
+        </p>
+        <form
+          action="https://formspree.io/f/mzdwyjke"
+          method="POST"
+          class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        >
+          <input type="hidden" name="_subject" value="Nueva suscripción Newsletter Teatro Oculto" />
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="tu@correo.cl"
+            class="flex-1 bg-white/06 border border-white/12 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-white/30 transition-colors"
+          />
+          <button type="submit" class="btn-primary whitespace-nowrap">Suscribirme</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

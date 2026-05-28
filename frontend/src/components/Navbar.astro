@@ -1,0 +1,172 @@
+---
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/iniciativas', label: 'Iniciativas' },
+  { href: '/obras', label: 'Obras' },
+  { href: '/contacto', label: 'Contáctanos' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  data-scrolled="false"
+>
+  <nav
+    class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between"
+    aria-label="Navegación principal"
+  >
+    <!-- Logo -->
+    <a href="/" aria-label="Teatro Oculto — inicio" class="flex-shrink-0 group">
+      <img
+        src="/images/brand/logo.png"
+        alt="Teatro Oculto"
+        class="h-28 w-auto transition-all duration-300 group-hover:opacity-90"
+        decoding="async"
+        loading="eager"
+      />
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="hidden lg:flex items-center gap-8" role="list">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="nav-link-theater"
+            aria-current={currentPath === link.href ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Instagram + hamburger -->
+    <div class="flex items-center gap-3">
+      <a
+        href="https://www.instagram.com/teatro.oculto_/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram de Teatro Oculto"
+        class="hidden sm:flex items-center justify-center w-12 h-12 rounded-xl border border-white/15 text-white/80 hover:text-white hover:border-white/35 hover:bg-white/5 transition-all duration-200"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+        </svg>
+      </a>
+
+      <!-- Hamburger (mobile) -->
+      <button
+        id="menu-toggle"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-xl border border-white/15 hover:border-white/30 transition-colors"
+      >
+        <span class="menu-line block w-5 h-px bg-white transition-all duration-300"></span>
+        <span class="menu-line block w-5 h-px bg-white transition-all duration-300"></span>
+        <span class="menu-line block w-3 h-px bg-white transition-all duration-300 self-start ml-1"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    role="dialog"
+    aria-label="Menú de navegación"
+    hidden
+    class="lg:hidden border-t border-white/05"
+    style="background: rgba(6,8,16,0.98); backdrop-filter: blur(24px);"
+  >
+    <ul class="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-1" role="list">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="flex items-center py-3 px-2 text-sm font-bold uppercase tracking-widest text-white/80 hover:text-white border-b border-white/05 hover:border-white/15 transition-colors"
+            aria-current={currentPath === link.href ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-4">
+        <a
+          href="https://www.instagram.com/teatro.oculto_/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-ghost text-xs"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+          </svg>
+          Instagram
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<!-- Spacer so content doesn't go under fixed navbar -->
+<div class="h-20" aria-hidden="true"></div>
+
+<script>
+  // Scroll: add glass blur when scrolled
+  const navbar = document.getElementById('navbar')!;
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      navbar.setAttribute('data-scrolled', String(!entry.isIntersecting));
+    },
+    { threshold: 0 },
+  );
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;top:1px;height:1px;pointer-events:none;';
+  document.body.prepend(sentinel);
+  observer.observe(sentinel);
+
+  // Style based on scroll
+  const updateNavbar = () => {
+    const scrolled = navbar.getAttribute('data-scrolled') === 'true';
+    if (scrolled) {
+      navbar.style.cssText = 'background:rgba(6,8,16,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);';
+    } else {
+      navbar.style.cssText = 'background:transparent;backdrop-filter:none;border-bottom:1px solid transparent;';
+    }
+  };
+
+  new MutationObserver(updateNavbar).observe(navbar, { attributes: true, attributeFilter: ['data-scrolled'] });
+  updateNavbar();
+
+  // Mobile menu toggle
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  toggle.addEventListener('click', () => {
+    const open = !menu.hidden;
+    menu.hidden = open;
+    toggle.setAttribute('aria-expanded', String(!open));
+    // Animate hamburger lines
+    const lines = toggle.querySelectorAll('.menu-line');
+    if (!open) {
+      (lines[0] as HTMLElement).style.transform = 'rotate(45deg) translate(4px, 4px)';
+      (lines[1] as HTMLElement).style.opacity = '0';
+      (lines[2] as HTMLElement).style.transform = 'rotate(-45deg) translate(4px, -4px)';
+      (lines[2] as HTMLElement).style.width = '20px';
+      (lines[2] as HTMLElement).style.marginLeft = '0';
+    } else {
+      (lines[0] as HTMLElement).style.transform = '';
+      (lines[1] as HTMLElement).style.opacity = '';
+      (lines[2] as HTMLElement).style.transform = '';
+      (lines[2] as HTMLElement).style.width = '';
+      (lines[2] as HTMLElement).style.marginLeft = '';
+    }
+  });
+</script>

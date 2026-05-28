@@ -1,0 +1,176 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block title %}Iniciativas — Teatro Oculto{% endblock %}
+
+{% block content %}
+<div class="site-section">
+  <h2>Ejes</h2>
+
+  <div class="row g-3 align-items-start">
+    <div class="col-lg-4">
+      <details class="card bg-dark text-light ini-details">
+        <summary class="ini-summary">
+          <div class="card-body pb-2">
+            <h5 class="card-title mb-0">Creación y Práctica Teatral</h5>
+          </div>
+          <div class="ini-media">
+          <img src="{% static 'iniciativas/creacion-y-practica-teatral.png' %}" class="w-100" alt="Creación y Práctica Teatral" decoding="async" style="height: 280px; object-fit: contain;">
+            <div class="ini-hover">Leer más</div>
+          </div>
+        </summary>
+        <div class="ini-body-wrap">
+          <div class="ini-body card-body">
+            <p class="card-text">Teatro Oculto impulsa una instancia permanente de práctica y creación teatral orientada a sus integrantes, con el objetivo de fortalecer la creación colectiva y sostener una práctica profesional constante. Estos procesos se desarrollan desde un enfoque territorial, orientado a situar la creación escénica en el contexto social y cultural desde el cual la compañía ejerce su quehacer, contribuyendo activamente a la descentralización y democratización cultural.</p>
+            <p class="card-text">De manera complementaria, esta iniciativa contempla la apertura de espacios de práctica teatral a la comunidad, generando instancias de participación donde es posible experimentar las herramientas, metodologías y procesos del oficio teatral, promoviendo el intercambio de saberes, la formación artística y la vinculación con el entorno.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="col-lg-4">
+      <details class="card bg-dark text-light ini-details">
+        <summary class="ini-summary">
+          <div class="card-body pb-2">
+            <h5 class="card-title mb-0">Formación de audiencias</h5>
+          </div>
+          <div class="ini-media">
+          <img src="{% static 'iniciativas/formacion-de-audiencias.png' %}" class="w-100" alt="Formación de audiencias" decoding="async" style="height: 280px; object-fit: contain;">
+            <div class="ini-hover">Leer más</div>
+          </div>
+        </summary>
+        <div class="ini-body-wrap">
+          <div class="ini-body card-body">
+            <p class="card-text">La formación de audiencias constituye uno de los ejes estratégicos de Teatro Oculto, orientado a la gestión y producción de instancias de exhibición de teatro independiente. Esta iniciativa busca facilitar el acceso a experiencias escénicas de carácter autoral y reflexivo, acercando propuestas con contenido y profundidad artística a territorios y comunidades que carecen de programación estable, promoviendo el teatro como espacio de encuentro, pensamiento y diálogo.</p>
+            <p class="card-text">Paralelamente, estas instancias permiten observar y estudiar el comportamiento de públicos emergentes, con el fin de fortalecer las estrategias de mediación, difusión y vinculación territorial, ampliando el alcance e impacto del quehacer escénico.</p>
+            <p class="card-text">En este marco, Teatro Oculto ha gestionado la presentación de obras como <em>Algo de Ricardo</em>, una lectura contemporánea del clásico de Shakespeare en formato de monólogo, y <em>Al caer la noche</em>, propuesta de teatro performance basada en textos de poesía polidelana, incorporando además instancias formativas como talleres de teatro impartidos por los propios artistas escénicos participantes.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="col-lg-4">
+      <details class="card bg-dark text-light ini-details">
+        <summary class="ini-summary">
+          <div class="card-body pb-2">
+            <h5 class="card-title mb-0">Colaboración y comunidad</h5>
+          </div>
+          <div class="ini-media">
+          <img src="{% static 'iniciativas/colaboracion-y-comunidad.png' %}" class="w-100" alt="Colaboración y comunidad" decoding="async" style="height: 280px; object-fit: contain;">
+            <div class="ini-hover">Leer más</div>
+          </div>
+        </summary>
+        <div class="ini-body-wrap">
+          <div class="ini-body card-body">
+            <p class="card-text">Teatro Oculto se inserta en un territorio donde convergen diversos agentes culturales, organizaciones e instituciones afines, con quienes es posible establecer diálogos y acciones coherentes con los objetivos que la compañía busca fortalecer y promover. En este contexto, su equipo ha mantenido una disposición activa a la colaboración, participando en distintos niveles y áreas de apoyo a iniciativas impulsadas por organizaciones y colectivos locales.</p>
+            <p class="card-text">Esta labor colaborativa se ha materializado tanto en el apoyo técnico y escénico a presentaciones de talleres teatrales facilitados por integrantes de la propia compañía, como en el desarrollo de alianzas con otras organizaciones artísticas, entre ellas la Fundación Arte & Música, contribuyendo a la puesta en escena de sus conciertos.</p>
+            <p class="card-text">De este modo, Teatro Oculto consolida la colaboración y el trabajo en comunidad como un eje fundamental de su quehacer, orientado a cultivar redes, apoyos y alianzas con entidades culturales, sociales y educativas del territorio, fortaleciendo el ecosistema artístico local.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  {% if iniciativas %}
+    <hr class="my-4">
+    <h3 class="h4">Iniciativas</h3>
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+      {% for ini in iniciativas %}
+        <div class="col">
+          <div class="card bg-dark h-100">
+            {% if ini.git_image_url %}
+              <img
+                src="{{ ini.git_image_url }}"
+                {% if ini.git_image_thumb_url %}srcset="{{ ini.git_image_thumb_url }} 640w, {{ ini.git_image_url }} 1400w"{% endif %}
+                sizes="(max-width: 768px) 100vw, 420px"
+                class="card-img-top"
+                alt="{{ ini.title }}"
+                loading="lazy"
+                decoding="async"
+                style="height:180px; object-fit:cover;"
+                onerror="this.onerror=null;this.src='{% static 'placeholder_photo.svg' %}';">
+            {% elif ini.image %}
+              <img src="{{ ini.image.url }}" class="card-img-top" alt="{{ ini.title }}" loading="lazy" decoding="async" style="height:180px; object-fit:cover;" onerror="this.onerror=null;this.src='{% static 'placeholder_photo.svg' %}';">
+            {% else %}
+              <img src="{% static 'placeholder_photo.svg' %}" class="card-img-top" alt="{{ ini.title }}" loading="lazy" decoding="async" style="height:180px; object-fit:cover;">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ ini.title }}</h5>
+              <p class="card-text small">{{ ini.description }}</p>
+              <p class="small text-muted mb-0">{{ ini.get_category_display }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .ini-details { overflow: hidden; }
+  .ini-summary { cursor: pointer; list-style: none; }
+  .ini-summary::-webkit-details-marker { display: none; }
+
+  .ini-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+  }
+  .ini-summary img {
+    transition: transform 220ms ease, filter 220ms ease;
+    transform: translateY(0) scale(1);
+    border-radius: inherit;
+    display: block;
+  }
+  .ini-details:hover .ini-summary img {
+    transform: translateY(-2px) scale(1.01);
+    filter: brightness(1.06);
+  }
+
+  .ini-hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 180ms ease;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.35);
+    border-radius: inherit;
+  }
+  details:hover .ini-hover,
+  summary:focus-visible .ini-hover {
+    opacity: 1;
+  }
+
+  .ini-body-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 260ms ease;
+  }
+  .ini-body {
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 220ms ease, transform 260ms ease;
+  }
+  details[open] .ini-body-wrap { grid-template-rows: 1fr; }
+  details[open] .ini-body {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ini-summary img,
+    .ini-body-wrap,
+    .ini-body {
+      transition: none !important;
+    }
+    .ini-hover {
+      transition: none !important;
+    }
+  }
+</style>
+{% endblock %}

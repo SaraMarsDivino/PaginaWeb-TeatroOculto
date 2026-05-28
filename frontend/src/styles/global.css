@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Lenis smooth scroll ─────────────────────────────────────────── */
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --bg: #060810;
+    --accent: #e04242;
+    --gold: #d7b36a;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-[#060810] text-white/90 font-sans overflow-x-hidden;
+    background:
+      radial-gradient(circle at 8% 10%, rgba(255,255,255,0.04), transparent 14%),
+      radial-gradient(circle at 82% 18%, rgba(156,163,175,0.08), transparent 22%),
+      linear-gradient(180deg, rgba(17,24,39,0.22), rgba(0,0,0,0.92) 24%, rgba(0,0,0,1) 100%),
+      #060810;
+  }
+
+  /* ambient background orbs */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+    background:
+      radial-gradient(900px 520px at 18% 12%, rgba(224,66,66,0.14), transparent 55%),
+      radial-gradient(820px 540px at 80% 18%, rgba(215,179,106,0.12), transparent 60%),
+      radial-gradient(680px 480px at 60% 80%, rgba(255,255,255,0.05), transparent 62%);
+    mix-blend-mode: screen;
+    animation: spotlight-drift 18s ease-in-out infinite alternate;
+  }
+
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  ::selection {
+    background: rgba(224, 66, 66, 0.35);
+    color: #fff;
+  }
+}
+
+/* ─── Components ──────────────────────────────────────────────────── */
+@layer components {
+  /* Section wrapper */
+  .section {
+    @apply relative z-10 px-4 sm:px-6 lg:px-8 py-20 md:py-28 max-w-7xl mx-auto;
+  }
+
+  /* Glass card */
+  .card-glass {
+    @apply relative overflow-hidden rounded-2xl border border-white/5;
+    background:
+      linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012) 38%, rgba(156,163,175,0.045) 100%),
+      rgba(255,255,255,0.03);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 240ms ease;
+  }
+  .card-glass:hover {
+    transform: translateY(-3px);
+    border-color: rgba(215,179,106,0.24);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.38);
+  }
+  .card-glass:hover .card-img {
+    transform: scale(1.018);
+    filter: contrast(1.08) saturate(1.02);
+  }
+
+  /* Card image */
+  .card-img {
+    @apply w-full object-cover;
+    filter: contrast(1.06) saturate(0.95);
+    transform: translateZ(0);
+    transition: transform 280ms ease, filter 280ms ease;
+  }
+
+  /* Btn primary */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-sm text-white;
+    background: #e04242;
+    border: 1px solid rgba(0,0,0,0.3);
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  }
+  .btn-primary:hover {
+    background: #ff5a5a;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(224,66,66,0.35);
+  }
+
+  /* Btn ghost */
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-sm text-white/85;
+    border: 1px solid rgba(255,255,255,0.18);
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  }
+  .btn-ghost:hover {
+    @apply text-white;
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Section heading */
+  .section-title {
+    @apply text-xs font-black uppercase tracking-theater text-white/50 mb-2;
+  }
+  .section-heading {
+    @apply text-4xl md:text-5xl font-black text-white leading-tight;
+  }
+
+  /* Gold bar divider */
+  .gold-bar {
+    @apply h-px w-16 my-3;
+    background: linear-gradient(90deg, transparent, #d7b36a, transparent);
+  }
+
+  /* Grain overlay */
+  .grain {
+    @apply absolute inset-0 pointer-events-none z-[1] opacity-[0.035];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+  }
+
+  /* Nav link underline */
+  .nav-link-theater {
+    @apply relative font-bold uppercase tracking-widest text-sm text-white/85 transition-colors hover:text-white;
+  }
+  .nav-link-theater::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 right-0 h-px;
+    background: linear-gradient(90deg, transparent, #d7b36a, transparent);
+    transform: scaleX(0);
+    transition: transform 240ms ease;
+  }
+  .nav-link-theater:hover::after,
+  .nav-link-theater[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  .nav-link-theater:hover,
+  .nav-link-theater[aria-current='page'] {
+    transform: translateY(-1px);
+  }
+}
+
+/* ─── Utilities ───────────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .z-base {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,153 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block title %}Obras — Teatro Oculto{% endblock %}
+
+{% block content %}
+  <div class="site-section">
+  <h2>Obras</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-3">
+    {% for obra in obras %}
+      <div class="col">
+        <div class="card bg-dark card-live h-100">
+          {% if obra.git_poster_url %}
+            <img
+              src="{{ obra.git_poster_url }}"
+              {% if obra.git_poster_thumb_url %}srcset="{{ obra.git_poster_thumb_url }} 640w, {{ obra.git_poster_url }} 1400w"{% endif %}
+              sizes="(max-width: 768px) 100vw, (max-width: 992px) 50vw, 33vw"
+              class="card-img-top"
+              alt="{{ obra.title }}"
+              loading="lazy"
+              decoding="async"
+              style="height:220px; object-fit:cover;"
+              onerror="this.onerror=null;this.src='{% static 'placeholder_poster.svg' %}';">
+          {% elif obra.poster_image %}
+            <img src="{{ obra.poster_image.url }}" class="card-img-top" alt="{{ obra.title }}" loading="lazy" decoding="async" style="height:220px; object-fit:cover;" onerror="this.onerror=null;this.src='{% static 'placeholder_poster.svg' %}';">
+          {% else %}
+            <img src="{% static 'placeholder_poster.svg' %}" class="card-img-top" alt="{{ obra.title }}" loading="lazy" decoding="async" style="height:220px; object-fit:cover;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title obra-title">{{ obra.title }}</h5>
+            <p class="card-text small">{{ obra.synopsis|truncatechars:150 }}</p>
+            {% if obra.release_date %}
+              <p class="small text-muted">Estreno: {{ obra.release_date|date:"F, Y"|capfirst }}</p>
+            {% endif %}
+
+            <button
+              type="button"
+              class="btn btn-outline-theme btn-sm mt-2"
+              data-bs-toggle="modal"
+              data-bs-target="#obraModal{{ obra.id }}"
+            >
+              Más información
+            </button>
+          </div>
+        </div>
+
+        <div class="modal fade" id="obraModal{{ obra.id }}" tabindex="-1" aria-labelledby="obraModalLabel{{ obra.id }}" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-light">
+              <div class="modal-header">
+                <h5 class="modal-title" id="obraModalLabel{{ obra.id }}">{{ obra.title }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                {% if obra.git_poster_url %}
+                  <img
+                    src="{{ obra.git_poster_url }}"
+                    {% if obra.git_poster_thumb_url %}srcset="{{ obra.git_poster_thumb_url }} 640w, {{ obra.git_poster_url }} 1400w"{% endif %}
+                    sizes="(max-width: 768px) 100vw, 720px"
+                    class="img-fluid mb-3"
+                    alt="{{ obra.title }}"
+                    loading="lazy"
+                    decoding="async"
+                    style="width:100%; max-height:380px; object-fit:cover; border:1px solid rgba(255,255,255,0.05);"
+                    onerror="this.onerror=null;this.src='{% static 'placeholder_poster.svg' %}';">
+                {% elif obra.poster_image %}
+                  <img src="{{ obra.poster_image.url }}" class="img-fluid mb-3" alt="{{ obra.title }}" loading="lazy" decoding="async" style="width:100%; max-height:380px; object-fit:cover; border:1px solid rgba(255,255,255,0.05);" onerror="this.onerror=null;this.src='{% static 'placeholder_poster.svg' %}';">
+                {% endif %}
+
+                {% if obra.release_date %}
+                  <p class="small text-muted mb-3">Estreno: {{ obra.release_date|date:"F, Y"|capfirst }}</p>
+                {% endif %}
+
+                <div class="small" style="color: rgba(255,255,255,0.82); line-height:1.85;">
+                  {{ obra.synopsis|linebreaksbr }}
+                </div>
+
+                <div class="mt-4">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                    <h6 class="mb-2" style="letter-spacing:0.14em; text-transform:uppercase; font-weight:900;">Galería</h6>
+                    <span class="small text-muted">Imágenes de la obra</span>
+                  </div>
+
+                  {% if obra.git_gallery_items %}
+                    <div class="row g-2">
+                      {% for item in obra.git_gallery_items %}
+                        <div class="col-6 col-md-4">
+                          <a href="{{ item.full }}" target="_blank" rel="noopener" style="display:block; border:1px solid rgba(255,255,255,0.05);">
+                            <img
+                              src="{{ item.full }}"
+                              {% if item.thumb %}srcset="{{ item.thumb }} 360w, {{ item.full }} 1200w"{% endif %}
+                              sizes="(max-width: 768px) 50vw, 260px"
+                              alt="Imagen {{ forloop.counter }} — {{ obra.title }}"
+                              loading="lazy"
+                              decoding="async"
+                              style="width:100%; height:120px; object-fit:cover; display:block; filter: contrast(1.05) saturate(1.02);">
+                          </a>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% elif obra.git_gallery_images %}
+                    <div class="row g-2">
+                      {% for img in obra.git_gallery_images %}
+                        <div class="col-6 col-md-4">
+                          <a href="{{ img }}" target="_blank" rel="noopener" style="display:block; border:1px solid rgba(255,255,255,0.05);">
+                            <img src="{{ img }}" alt="Imagen {{ forloop.counter }} — {{ obra.title }}" loading="lazy" decoding="async" style="width:100%; height:120px; object-fit:cover; display:block; filter: contrast(1.05) saturate(1.02);">
+                          </a>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% elif obra.gallery_images %}
+                    <div class="row g-2">
+                      {% for img in obra.gallery_images %}
+                        <div class="col-6 col-md-4">
+                          <a href="{{ img }}" target="_blank" rel="noopener" style="display:block; border:1px solid rgba(255,255,255,0.05);">
+                            <img src="{{ img }}" alt="Imagen {{ forloop.counter }} — {{ obra.title }}" loading="lazy" decoding="async" style="width:100%; height:120px; object-fit:cover; display:block; filter: contrast(1.05) saturate(1.02);">
+                          </a>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <div class="p-3" style="border:1px dashed rgba(255,255,255,0.18); background: rgba(255,255,255,0.03);">
+                      <div class="small text-muted">Aún no hay imágenes disponibles para esta obra.</div>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-theme" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="card bg-dark" style="border:1px dashed rgba(255,255,255,0.12);">
+          <div class="card-body">
+            <h5 class="card-title">No hay obras publicadas aún</h5>
+            <p class="small text-muted mb-0">En local puedes cargar datos de ejemplo con <span style="color:rgba(255,255,255,0.85);">python manage.py loaddata web/fixtures/sample_data.json</span> o crear obras desde el admin.</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  </div>
+
+  <style>
+    .obra-title {
+      text-wrap: balance;
+      hyphens: auto;
+    }
+  </style>
+{% endblock %}

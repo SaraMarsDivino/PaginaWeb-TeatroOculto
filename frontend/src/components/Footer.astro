@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+const obras = await getCollection('obras', ({ data }) => data.active);
+const recentObras = obras.slice(0, 3);
+---
+
+<footer class="relative z-10 mt-24 border-t border-white/06" style="background:#000;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+      <!-- Isotipo -->
+      <div class="flex items-start justify-start md:justify-center">
+        <a href="/" aria-label="Teatro Oculto">
+          <img
+            src="/images/brand/isotipo.png"
+            alt="Isotipo Teatro Oculto"
+            class="h-28 w-auto opacity-90 hover:opacity-100 transition-opacity"
+            style="filter: brightness(0) invert(1) contrast(1.6) drop-shadow(0 12px 20px rgba(0,0,0,0.7));"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </div>
+
+      <!-- Noticias -->
+      <div>
+        <p class="text-xs font-black uppercase tracking-theater text-white mb-5">Obras</p>
+        <ul class="space-y-3" role="list">
+          {recentObras.map((obra) => (
+            <li class="pb-3 border-b border-white/06">
+              <a href="/obras" class="text-sm text-white/85 hover:text-white transition-colors block">
+                {obra.data.title}
+              </a>
+              {obra.data.release_date && (
+                <span class="text-xs text-white/40 mt-0.5 block">
+                  {new Date(obra.data.release_date).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' })}
+                </span>
+              )}
+            </li>
+          ))}
+          {recentObras.length === 0 && (
+            <li class="text-sm text-white/40">Próximamente novedades.</li>
+          )}
+        </ul>
+      </div>
+
+      <!-- Contacto -->
+      <div>
+        <p class="text-xs font-black uppercase tracking-theater text-white mb-5">Contacto</p>
+        <div class="flex flex-col gap-3 text-sm">
+          <a
+            href="mailto:gestion@teatrooculto.cl"
+            class="text-white/80 hover:text-white transition-colors"
+          >
+            gestion@teatrooculto.cl
+          </a>
+          <a href="/contacto" class="text-white/80 hover:text-white transition-colors">
+            Formulario de contacto
+          </a>
+          <a
+            href="https://www.facebook.com/people/Teatro-Oculto/61588505524109/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white/80 hover:text-white transition-colors"
+          >
+            Facebook
+          </a>
+        </div>
+
+        <!-- Social icons -->
+        <div class="flex gap-4 mt-6">
+          <a
+            href="https://www.instagram.com/teatro.oculto_/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="text-white/70 hover:text-white transition-colors"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+            </svg>
+          </a>
+          <a
+            href="https://www.facebook.com/people/Teatro-Oculto/61588505524109/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            class="text-white/70 hover:text-white transition-colors"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.7.3-1 1-1z" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-white/06 flex justify-center">
+      <p class="text-xs text-white/40 uppercase tracking-widest">
+        © Teatro Oculto — Todos los derechos reservados
+      </p>
+    </div>
+  </div>
+</footer>

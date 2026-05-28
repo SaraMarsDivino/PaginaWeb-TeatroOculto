@@ -1,0 +1,58 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import ObrasGrid from '@/components/react/ObrasGrid';
+import { getCollection } from 'astro:content';
+
+const obras = await getCollection('obras', ({ data }) => data.active);
+const sorted = obras.sort(
+  (a, b) => new Date(b.data.release_date ?? 0).getTime() - new Date(a.data.release_date ?? 0).getTime()
+);
+
+// Serialize for React (content collections can't be passed directly as props)
+const obrasData = sorted.map((o) => ({
+  id: o.slug,
+  title: o.data.title,
+  synopsis: o.data.synopsis,
+  poster: o.data.poster,
+  release_date: o.data.release_date,
+  gallery: o.data.gallery,
+  duration: o.data.duration,
+  cast: o.data.cast,
+}));
+---
+
+<BaseLayout
+  title="Obras — Teatro Oculto"
+  description="Descubre las obras de Teatro Oculto: creaciones propias y adaptaciones del teatro contemporáneo."
+>
+  <Navbar slot="navbar" />
+
+  <!-- Hero -->
+  <section class="section pt-16 pb-14">
+    <p class="section-title">En escena</p>
+    <h1 class="section-heading mb-3">Obras</h1>
+    <div class="gold-bar"></div>
+    <p class="mt-5 text-sm text-white/50 max-w-lg leading-relaxed">
+      Creaciones propias y adaptaciones del teatro contemporáneo que exploran la condición humana
+      desde territorios descentralizados.
+    </p>
+  </section>
+
+  <!-- Grid -->
+  <section class="section pt-0 pb-28">
+    {obrasData.length > 0 ? (
+      <ObrasGrid client:visible obras={obrasData} />
+    ) : (
+      <div
+        class="py-20 text-center rounded-3xl border"
+        style="border-color: rgba(255,255,255,0.08); border-style: dashed;"
+      >
+        <p class="text-sm text-white/35 font-medium">No hay obras publicadas aún.</p>
+      </div>
+    )}
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

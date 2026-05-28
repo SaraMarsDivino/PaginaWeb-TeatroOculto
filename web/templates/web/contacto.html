@@ -1,0 +1,38 @@
+{% extends "web/base.html" %}
+{% block title %}Contáctanos — Teatro Oculto{% endblock %}
+
+{% block content %}
+  <div class="site-section">
+  <h2>Contáctanos</h2>
+  {% if sent %}
+    <div class="alert alert-success">Tu mensaje ha sido enviado. Gracias.</div>
+  {% endif %}
+  <p>Puedes escribirnos a <a href="mailto:gestion@teatrooculto.cl">gestion@teatrooculto.cl</a> o enviarnos un mensaje mediante el formulario.</p>
+  <div class="card bg-dark text-light">
+    <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% if sent %}
+            <div class="alert alert-success">Tu mensaje ha sido enviado. Gracias.</div>
+          {% endif %}
+          <div class="mb-3">
+            {{ contacto_form.name.label_tag }}
+            {{ contacto_form.name }}
+            {% if contacto_form.name.errors %}<div class="text-danger small">{{ contacto_form.name.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="mb-3">
+            {{ contacto_form.email.label_tag }}
+            {{ contacto_form.email }}
+            {% if contacto_form.email.errors %}<div class="text-danger small">{{ contacto_form.email.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="mb-3">
+            {{ contacto_form.message.label_tag }}
+            {{ contacto_form.message }}
+            {% if contacto_form.message.errors %}<div class="text-danger small">{{ contacto_form.message.errors.0 }}</div>{% endif %}
+          </div>
+          <button class="btn btn-theme">Enviar</button>
+        </form>
+    </div>
+  </div>
+  </div>
+{% endblock %}

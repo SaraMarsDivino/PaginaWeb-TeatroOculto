@@ -1,0 +1,91 @@
+{% extends "web/base.html" %}
+
+{% block title %}Listas — Teatro Oculto{% endblock %}
+
+{% block content %}
+  <div class="site-section">
+    <div class="d-flex justify-content-between align-items-baseline flex-wrap gap-2">
+      <div>
+        <h2 class="mb-1">Listas</h2>
+        <p class="small text-muted mb-0">Suscriptores registrados (solo staff).</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-theme btn-sm"
+           href="?export=excel&sort={{ sort }}&dir={{ dir }}&per_page={{ per_page }}">
+          Exportar a Excel
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2 align-items-center">
+      <span class="small text-muted">Ordenar por:</span>
+      <a class="btn btn-outline-theme btn-sm" href="?sort=orden&dir={% if sort == 'orden' and dir == 'desc' %}asc{% else %}desc{% endif %}&per_page={{ per_page }}">Orden</a>
+      <a class="btn btn-outline-theme btn-sm" href="?sort=correo&dir={% if sort == 'correo' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Correo</a>
+      <a class="btn btn-outline-theme btn-sm" href="?sort=nombre&dir={% if sort == 'nombre' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Nombre</a>
+      <a class="btn btn-outline-theme btn-sm" href="?sort=edad&dir={% if sort == 'edad' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Edad</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-dark table-striped align-middle">
+        <thead>
+          <tr>
+            <th scope="col">
+              <a class="text-decoration-none" style="color: inherit;" href="?sort=correo&dir={% if sort == 'correo' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Correo</a>
+            </th>
+            <th scope="col">
+              <a class="text-decoration-none" style="color: inherit;" href="?sort=nombre&dir={% if sort == 'nombre' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Nombre</a>
+            </th>
+            <th scope="col">
+              <a class="text-decoration-none" style="color: inherit;" href="?sort=edad&dir={% if sort == 'edad' and dir == 'asc' %}desc{% else %}asc{% endif %}&per_page={{ per_page }}">Edad</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in suscriptores %}
+            <tr>
+              <td>{{ s.email }}</td>
+              <td>{{ s.name|default:"" }}</td>
+              <td>{% if s.age %}{{ s.age }}{% endif %}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" class="text-muted">Aún no hay suscriptores.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if page_obj %}
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+        <div class="small text-muted">
+          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} ({{ page_obj.paginator.count }} registros)
+        </div>
+        <nav aria-label="Paginación">
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+              <a class="page-link" href="?page=1&sort={{ sort }}&dir={{ dir }}&per_page={{ per_page }}">Primera</a>
+            </li>
+            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+              {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&dir={{ dir }}&per_page={{ per_page }}">Anterior</a>
+              {% else %}
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+              {% endif %}
+            </li>
+            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+              {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&dir={{ dir }}&per_page={{ per_page }}">Siguiente</a>
+              {% else %}
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguiente</a>
+              {% endif %}
+            </li>
+            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&sort={{ sort }}&dir={{ dir }}&per_page={{ per_page }}">Última</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

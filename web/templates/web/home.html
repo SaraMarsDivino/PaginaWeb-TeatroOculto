@@ -1,0 +1,371 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block title %}Inicio — Teatro Oculto{% endblock %}
+
+{% block content %}
+<style>
+  .hero-carousel-img {
+    height: clamp(320px, 60vh, 520px);
+    object-fit: cover;
+    object-position: 50% var(--hero-pos-y, 50%);
+    filter: contrast(1.12) saturate(1.10) brightness(1.16);
+    transform: translateZ(0);
+    will-change: transform, filter;
+  }
+  .hero-carousel {
+    position: relative;
+    border-radius: 26px;
+    overflow: hidden;
+    border: 0;
+    box-shadow:
+      0 28px 70px rgba(0,0,0,0.52),
+      0 0 58px rgba(215,179,106,0.12),
+      inset 0 0 24px rgba(255,255,255,0.03);
+  }
+  .carousel-item { position: relative; }
+  .carousel-inner { overflow: hidden; border-radius: 24px; }
+
+  .hero-carousel-ghost {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 7;
+    border-radius: 24px;
+    box-shadow: inset 0 0 28px rgba(255,255,255,0.05);
+    background:
+      radial-gradient(120% 86% at 50% 50%, rgba(255,255,255,0.00) 58%, rgba(255,255,255,0.15) 100%),
+      linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.00) 42%);
+    mix-blend-mode: screen;
+  }
+
+  /* Soft top/bottom ghost fade (less hard than letterbox bars) */
+  .hero-carousel::before,
+  .hero-carousel::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: clamp(42px, 8vh, 84px);
+    z-index: 9;
+    pointer-events: none;
+    backdrop-filter: blur(1.2px);
+  }
+  .hero-carousel::before {
+    top: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(6,8,12,0.78) 0%,
+        rgba(6,8,12,0.42) 42%,
+        rgba(6,8,12,0.00) 100%);
+  }
+  .hero-carousel::after {
+    bottom: 0;
+    background:
+      linear-gradient(0deg,
+        rgba(6,8,12,0.82) 0%,
+        rgba(6,8,12,0.44) 42%,
+        rgba(6,8,12,0.00) 100%),
+      radial-gradient(90% 120% at 50% 100%, rgba(215,179,106,0.08), transparent 65%);
+  }
+
+  /* Slow cinematic push-in on the active slide */
+  .carousel-item.active .hero-carousel-img {
+    animation: kenBurns 9s ease-out both;
+  }
+  @keyframes kenBurns {
+    from { transform: scale(1.02); }
+    to { transform: scale(1.08); }
+  }
+  .cinema-vignette {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:4;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(0,0,0,0.02), rgba(0,0,0,0.36) 80%),
+      linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.30));
+  }
+  .cinema-grain {
+    position:absolute;
+    inset:0;
+    z-index:5;
+    pointer-events:none;
+    opacity:0.08;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.03), rgba(255,255,255,0.03) 1px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 5px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 1px, rgba(0,0,0,0) 3px, rgba(0,0,0,0) 7px);
+    mix-blend-mode: overlay;
+    transform: translateZ(0);
+    animation: grainShift 10s steps(10) infinite;
+  }
+  @keyframes grainShift {
+    0% { transform: translate(0,0); }
+    20% { transform: translate(-2%, 1%); }
+    40% { transform: translate(1%, -2%); }
+    60% { transform: translate(-1%, -1%); }
+    80% { transform: translate(2%, 0%); }
+    100% { transform: translate(0,0); }
+  }
+
+  .cinema-tag {
+    position:absolute;
+    left: 16px;
+    bottom: calc(14px + clamp(18px, 3.2vh, 36px));
+    z-index: 10;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+  .cinema-tag .bar { width: 56px; height: 3px; background: var(--accent); }
+  .cinema-tag .bar {
+    background: linear-gradient(90deg, var(--accent), var(--accent-gold), var(--accent));
+    background-size: 200% 100%;
+    animation: barSheen 3.2s ease-in-out infinite;
+  }
+  @keyframes barSheen {
+    0% { background-position: 0% 50%; opacity: 0.92; }
+    50% { background-position: 100% 50%; opacity: 1; }
+    100% { background-position: 0% 50%; opacity: 0.92; }
+  }
+  .cinema-tag .title {
+    color: rgba(255,255,255,0.92);
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+  }
+
+  .initiativas-panel {
+    position: relative;
+    padding: 1.25rem;
+    border: 1px solid rgba(255,255,255,0.03);
+    background:
+      radial-gradient(circle at 18% 8%, rgba(224,66,66,0.18), transparent 42%),
+      radial-gradient(circle at 78% 12%, var(--accent-gold-soft), transparent 46%),
+      radial-gradient(circle at 90% 70%, rgba(255,255,255,0.06), transparent 45%),
+      rgba(255,255,255,0.03);
+    border-radius: 26px;
+    overflow: hidden;
+  }
+  .initiativas-panel:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      radial-gradient(520px 220px at 22% 18%, rgba(215,179,106,0.08), transparent 60%);
+    animation: panelDrift 12s ease-in-out infinite alternate;
+  }
+  @keyframes panelDrift {
+    0% { transform: translate3d(0,0,0); filter: blur(0px); opacity: 0.95; }
+    100% { transform: translate3d(0.7%, -0.6%, 0); filter: blur(0.25px); opacity: 1; }
+  }
+  .initiativas-head{ position:relative; z-index:1; }
+  .initiativas-title{ margin:0; color:#fff; font-weight:900; letter-spacing:0.16em; text-transform:uppercase; font-size:0.95rem; }
+  .initiativas-panel .card{
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+  }
+  .initiativas-panel .card:hover{
+    transform: translateY(-3px);
+    border-color: rgba(224,66,66,0.35);
+    background: rgba(0,0,0,0.32);
+  }
+  .initiativas-panel .card-img-top{ border-radius: 0; }
+  .initiativas-panel .card .card-title{ font-weight: 800; }
+  .ini-link{
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Make the two initiative cards use identical height */
+  .ini-card { display: flex; }
+  .ini-card .ini-link { display: flex; flex: 1; min-width: 0; }
+  .ini-card .card { display: flex; flex-direction: column; flex: 1; }
+  .ini-card .card-body { flex: 1; }
+
+  .ini-card .card-body{ padding: 1rem; }
+  .ini-card .card-title{ font-size: 1rem; margin-bottom: .45rem; }
+
+  .equal-panels { align-items: flex-start; }
+  .equal-panels > [class*='col-'] { display: flex; align-items: flex-start; min-width: 0; }
+  .panel-wrapper { width: 100%; max-width: 100%; border-radius: 26px; overflow: hidden; }
+  .newsletter-panel {
+    border: 1px solid rgba(255,255,255,0.03);
+    background:
+      radial-gradient(circle at 20% 0%, rgba(224,66,66,0.18), transparent 50%),
+      rgba(255,255,255,0.03);
+  }
+
+  @media (max-width: 576px) {
+    .hero-carousel-img { height: 380px; }
+    .cinema-tag { left: 12px; bottom: 12px; }
+    .cinema-tag .bar { width: 40px; }
+    .initiativas-panel { padding: 0.9rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-item.active .hero-carousel-img { animation: none; }
+    .cinema-grain { animation: none; }
+    .cinema-tag .bar { animation: none; }
+    .initiativas-panel:before { animation: none; }
+  }
+</style>
+
+<div class="site-section">
+  <!-- Hero Carousel -->
+  <div id="heroCarousel" class="carousel slide carousel-fade mb-4 hero-carousel" data-bs-ride="carousel">
+    <div class="carousel-inner rounded">
+      {% if carousel_items %}
+        {% for item in carousel_items %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            {% with item.full|lower as full_lower %}
+            <img
+              src="{{ item.full }}{% if item.v %}?v={{ item.v }}{% endif %}"
+              {% if item.thumb %}srcset="{{ item.thumb }}{% if item.v %}?v={{ item.v }}{% endif %} 640w, {{ item.full }}{% if item.v %}?v={{ item.v }}{% endif %} 1920w"{% endif %}
+              sizes="100vw"
+              class="d-block w-100 hero-carousel-img"
+              alt="Slide {{ forloop.counter }}"
+              decoding="async"
+              {% if 'ensayo%201.jpg' in full_lower %}style="--hero-pos-y: 35%;"{% elif 'ensayo%202.jpg' in full_lower %}style="--hero-pos-y: 48%;"{% endif %}
+              {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+            {% endwith %}
+          </div>
+        {% endfor %}
+      {% elif carousel_images %}
+        {% for img in carousel_images %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ img }}" class="d-block w-100 hero-carousel-img" alt="Slide {{ forloop.counter }}" decoding="async" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          </div>
+        {% endfor %}
+      {% elif obras %}
+        {% for obra in obras %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          {% if obra.poster_image %}
+          <img src="{{ obra.poster_image.url }}" class="d-block w-100 hero-carousel-img" alt="{{ obra.title }}" decoding="async" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+          {% else %}
+          <div class="d-block w-100 bg-secondary" style="height:520px;"></div>
+          {% endif %}
+          <div class="carousel-caption d-none d-md-block text-start">
+            <h3 class="fw-bold">{{ obra.title }}</h3>
+            <p class="small">{{ obra.synopsis|truncatechars:200 }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="carousel-item active">
+          <img src="{% static 'placeholder_poster.svg' %}" class="d-block w-100 hero-carousel-img" alt="No hay obras" decoding="async" fetchpriority="high">
+          <div class="carousel-caption d-none d-md-block">
+            <h3>No hay obras activas</h3>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="cinema-vignette" aria-hidden="true"></div>
+    <div class="hero-carousel-ghost" aria-hidden="true"></div>
+    <div class="cinema-grain" aria-hidden="true"></div>
+    <div class="cinema-tag" aria-label="Teatro Oculto">
+      <div class="bar" aria-hidden="true"></div>
+      <div class="title">Teatro Oculto</div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <div class="section-fade-divider" aria-hidden="true"></div>
+
+  <!-- Iniciativas + Newsletter -->
+  <div class="row g-4 equal-panels">
+    <div class="col-md-7">
+      <div class="initiativas-panel panel-wrapper">
+        <div class="d-flex justify-content-between align-items-baseline mb-3 iniciativas-head">
+          <h5 class="initiativas-title">Iniciativas</h5>
+          <a href="{% url 'iniciativas' %}" class="small" style="letter-spacing:0.12em; text-transform:uppercase;">Ver más</a>
+        </div>
+
+        <div class="row g-3 position-relative" style="z-index:1;">
+          {% for ini in iniciativas %}
+              <div class="col-12 col-md-6 ini-card">
+                <a href="{% url 'iniciativas' %}" class="ini-link" aria-label="Ir a iniciativas">
+                  <div class="card bg-dark h-100">
+                    {% if ini.git_image_url %}
+                      <img
+                        src="{{ ini.git_image_url }}"
+                        {% if ini.git_image_thumb_url %}srcset="{{ ini.git_image_thumb_url }} 640w, {{ ini.git_image_url }} 1400w"{% endif %}
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        class="card-img-top"
+                        alt="{{ ini.title }}"
+                        loading="lazy"
+                        decoding="async"
+                        style="height:150px; object-fit:cover;"
+                        onerror="this.onerror=null;this.src='{% static 'placeholder_photo.svg' %}';">
+                    {% elif ini.image %}
+                      <img src="{{ ini.image.url }}" class="card-img-top" alt="{{ ini.title }}" loading="lazy" decoding="async" style="height:150px; object-fit:cover;" onerror="this.onerror=null;this.src='{% static 'placeholder_photo.svg' %}';">
+                    {% else %}
+                      <img src="{% static 'placeholder_photo.svg' %}" class="card-img-top" alt="{{ ini.title }}" loading="lazy" decoding="async" style="height:150px; object-fit:cover;">
+                    {% endif %}
+                    <div class="card-body">
+                      <div class="small text-muted mb-2">{{ ini.get_category_display }}</div>
+                      <h6 class="card-title">{{ ini.title }}</h6>
+                      {% if ini.description %}
+                        <p class="small mb-0" style="color: rgba(255,255,255,0.70);">{{ ini.description|truncatechars:95 }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </a>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="card bg-dark text-light newsletter-panel panel-wrapper">
+        <div class="card-body">
+          <h5 class="card-title" style="letter-spacing:0.14em; text-transform:uppercase; font-weight:900;">Mantente atento</h5>
+          <p class="card-text" style="color: rgba(255,255,255,0.72);">Suscríbete a nuestro boletín para recibir novedades sobre funciones y actividades.</p>
+
+          <form method="post" class="row g-2">
+            {% csrf_token %}
+            {% if suscribed %}
+              <div class="alert alert-success w-100 rounded-0">Gracias por suscribirte.</div>
+            {% endif %}
+            <div class="col-12">
+              <label for="id_name" class="form-label">Nombre</label>
+              {{ suscriptor_form.name }}
+            </div>
+            <div class="col-12 col-sm-4">
+              <label for="id_age" class="form-label">Edad</label>
+              {{ suscriptor_form.age }}
+            </div>
+            <div class="col-12 col-sm-8">
+              <label for="id_email" class="form-label">Correo</label>
+              {{ suscriptor_form.email }}
+            </div>
+            <div class="col-12">
+              <button class="btn btn-theme w-100" type="submit">Suscribirme</button>
+            </div>
+            {% if suscriptor_form.errors %}
+              <div class="col-12 mt-2">
+                <div class="alert alert-danger rounded-0">Por favor corrige los errores del formulario.</div>
+              </div>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

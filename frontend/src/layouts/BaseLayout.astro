@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Teatro Oculto',
+  description = 'Compañía de artes escénicas con sede en La Calera, Región de Valparaíso. Creación, formación y comunidad.',
+  image = '/images/brand/og-image.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#060810" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/brand/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/brand/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/brand/favicon-180.png" />
+
+    <!-- Fonts preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <style is:global>
+    @keyframes orb-drift-a {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(8vw, 6vh) scale(1.08); }
+      66%       { transform: translate(-4vw, 12vh) scale(0.94); }
+    }
+    @keyframes orb-drift-b {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(-10vw, -8vh) scale(1.12); }
+      66%       { transform: translate(6vw, -5vh) scale(0.96); }
+    }
+    .ambient-orb-a {
+      animation: orb-drift-a 28s ease-in-out infinite;
+    }
+    .ambient-orb-b {
+      animation: orb-drift-b 35s ease-in-out infinite;
+      animation-delay: -14s;
+    }
+  </style>
+
+  <body>
+    <!-- Global ambient background -->
+    <div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;">
+      <div class="ambient-orb-a" style="position:absolute;width:70vw;height:70vw;top:-20%;left:-15%;border-radius:50%;background:radial-gradient(circle, rgba(224,66,66,0.13) 0%, transparent 70%);filter:blur(60px);"></div>
+      <div class="ambient-orb-b" style="position:absolute;width:55vw;height:55vw;bottom:-15%;right:-10%;border-radius:50%;background:radial-gradient(circle, rgba(215,179,106,0.09) 0%, transparent 70%);filter:blur(80px);"></div>
+      <div id="global-spotlight" style="position:absolute;inset:0;opacity:0;transition:opacity 0.4s ease;"></div>
+    </div>
+
+    <slot name="navbar">
+      <!-- default navbar injected from Navbar.astro in each page -->
+    </slot>
+
+    <main style="position:relative;z-index:1;">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <!-- Global mouse spotlight -->
+    <script>
+      const spotlight = document.getElementById('global-spotlight') as HTMLElement | null;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced && spotlight) {
+        document.addEventListener('mousemove', (e) => {
+          spotlight.style.background = `radial-gradient(650px circle at ${e.clientX}px ${e.clientY}px, rgba(224,66,66,0.10), transparent 42%)`;
+          spotlight.style.opacity = '1';
+        }, { passive: true });
+      }
+    </script>
+
+    <!-- Lenis smooth scroll -->
+    <script>
+      import Lenis from 'lenis';
+
+      const lenis = new Lenis({
+        duration: 1.15,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        touchMultiplier: 2,
+      });
+
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Expose to window so React components can pause/resume
+      (window as any).__lenis = lenis;
+    </script>
+  </body>
+</html>

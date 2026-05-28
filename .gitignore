@@ -1,0 +1,43 @@
+.env
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+
+# Django
+*.sqlite3
+staticfiles/
+media/
+!media/iniciativas/
+!media/iniciativas/**
+
+# Local artifacts
+seed_content.json
+gunicorn.ctl
+docker-compose.override.yml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Multimedia source (archivos originales, no van al repo)
+MULTIMEDIA TEATRO OCULTO/
+
+# Astro / Node
+frontend/node_modules/
+frontend/.astro/
+frontend/dist/
+frontend/.env
+
+# Claude Code
+.agents/
+.claude/
+skills-lock.json
+memory/
