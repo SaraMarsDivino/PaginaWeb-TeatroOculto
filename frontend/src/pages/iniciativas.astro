@@ -39,7 +39,7 @@ const categoryColors: Record<string, string> = {
     <p class="section-title">Lo que hacemos</p>
     <h1 class="section-heading mb-3">Ejes de trabajo</h1>
     <div class="gold-bar"></div>
-    <p class="mt-5 text-sm text-white/55 max-w-lg leading-relaxed">
+    <p class="mt-5 text-sm text-white/75 max-w-lg leading-relaxed">
       Nuestro trabajo se articula en tres ejes complementarios que buscan fortalecer las artes escénicas
       desde la creación, la formación y la comunidad.
     </p>
@@ -47,7 +47,7 @@ const categoryColors: Record<string, string> = {
 
   <!-- Ejes cards -->
   <section class="section pt-0 pb-24">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
       {rendered.map(({ ini, Content }) => (
         <details
           class="card-glass overflow-hidden ini-details group"
@@ -94,7 +94,7 @@ const categoryColors: Record<string, string> = {
 
           <!-- Expandable body -->
           <div class="ini-body-wrap">
-            <div class="ini-body px-6 pb-6 text-sm text-white/60 leading-relaxed">
+            <div class="ini-body px-6 pb-6 text-sm text-white/80 leading-relaxed">
               <div class="h-px w-full bg-white/06 mb-5"></div>
               <div class="prose prose-invert prose-sm max-w-none">
                 <Content />

@@ -76,7 +76,7 @@ export default function ObrasGrid({ obras }: Props) {
               >
                 {obra.title}
               </h3>
-              <p className="text-sm text-white/55 leading-relaxed line-clamp-3 mb-4">
+              <p className="text-sm text-white/75 leading-relaxed line-clamp-3 mb-4">
                 {obra.synopsis.split('\n')[0]}
               </p>
 

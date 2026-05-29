@@ -65,7 +65,7 @@ export default function ContactForm() {
           </svg>
         </div>
         <h3 className="text-xl font-black text-white mb-2">Mensaje enviado</h3>
-        <p className="text-sm text-white/55">Gracias por contactarnos. Te responderemos a la brevedad.</p>
+        <p className="text-sm text-white/75">Gracias por contactarnos. Te responderemos a la brevedad.</p>
         <button onClick={() => setStatus('idle')} className="mt-6 btn-ghost text-xs">
           Enviar otro mensaje
         </button>
@@ -84,7 +84,7 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Name */}
         <div>
-          <label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-white/45 block mb-2">
+          <label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-white/65 block mb-2">
             Nombre *
           </label>
           <input
@@ -102,7 +102,7 @@ export default function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-white/45 block mb-2">
+          <label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-white/65 block mb-2">
             Correo *
           </label>
           <input
@@ -121,7 +121,7 @@ export default function ContactForm() {
 
       {/* Message */}
       <div>
-        <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-white/45 block mb-2">
+        <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-white/65 block mb-2">
           Mensaje *
         </label>
         <textarea

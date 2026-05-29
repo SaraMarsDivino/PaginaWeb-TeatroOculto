@@ -166,7 +166,7 @@ export default function SpotlightHero() {
           custom={0.55}
           initial="hidden"
           animate={hasEntered ? 'visible' : 'hidden'}
-          className="mt-8 text-sm sm:text-base text-white/55 font-medium max-w-md mx-auto leading-relaxed"
+          className="mt-8 text-sm sm:text-base text-white/75 font-medium max-w-md mx-auto leading-relaxed"
         >
           Compañía de teatro independiente comprometida con la creación escénica,
           la formación de audiencias y la vinculación comunitaria.
