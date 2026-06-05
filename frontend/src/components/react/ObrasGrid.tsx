@@ -31,6 +31,7 @@ const modalVariants = {
 
 export default function ObrasGrid({ obras }: Props) {
   const [selected, setSelected] = useState<Obra | null>(null);
+  const [lightbox, setLightbox] = useState<{ img: string; index: number } | null>(null);
   const reduced = useReducedMotion();
 
   const close = () => setSelected(null);
@@ -213,12 +214,10 @@ export default function ObrasGrid({ obras }: Props) {
                       <p className="text-xs font-black uppercase tracking-theater text-white/40 mb-3">Galería</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {selected.gallery.map((img, i) => (
-                          <a
+                          <button
                             key={i}
-                            href={img}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="overflow-hidden rounded-lg border border-white/05 hover:border-white/20 transition-colors"
+                            onClick={(e) => { e.stopPropagation(); setLightbox({ img, index: i }); }}
+                            className="overflow-hidden rounded-lg border border-white/05 hover:border-white/20 transition-colors cursor-zoom-in"
                           >
                             <img
                               src={img}
@@ -228,7 +227,7 @@ export default function ObrasGrid({ obras }: Props) {
                               loading="lazy"
                               decoding="async"
                             />
-                          </a>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -237,6 +236,77 @@ export default function ObrasGrid({ obras }: Props) {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+      {/* ── Lightbox ───────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            key="lb-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center"
+            onClick={() => setLightbox(null)}
+          >
+            {/* Barra superior */}
+            <div
+              className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {selected?.gallery && selected.gallery.length > 1 && (
+                <span className="text-xs text-white/40 font-medium">
+                  {lightbox.index + 1} / {selected.gallery.length}
+                </span>
+              )}
+              <button
+                onClick={() => setLightbox(null)}
+                className="ml-auto flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/05 text-sm font-semibold text-white/80 hover:text-white hover:border-white/50 hover:bg-white/10 transition-all"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                </svg>
+                Volver
+              </button>
+            </div>
+
+            {/* Imagen centrada */}
+            <motion.img
+              key={lightbox.img}
+              src={lightbox.img}
+              alt={`Imagen ${lightbox.index + 1}`}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="max-h-[80vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            {/* Flechas de navegación */}
+            {selected?.gallery && selected.gallery.length > 1 && (
+              <div
+                className="flex items-center gap-4 mt-6"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => { const g = selected.gallery!; setLightbox({ img: g[(lightbox.index - 1 + g.length) % g.length], index: (lightbox.index - 1 + g.length) % g.length }); }}
+                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/20 bg-white/05 text-white/70 hover:text-white hover:border-white/50 transition-all"
+                  aria-label="Imagen anterior"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                </button>
+                <button
+                  onClick={() => { const g = selected.gallery!; setLightbox({ img: g[(lightbox.index + 1) % g.length], index: (lightbox.index + 1) % g.length }); }}
+                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/20 bg-white/05 text-white/70 hover:text-white hover:border-white/50 transition-all"
+                  aria-label="Imagen siguiente"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
+                </button>
+              </div>
+            )}
+          </motion.div>
         )}
       </AnimatePresence>
     </>
