@@ -18,7 +18,7 @@ Sitio web de **Teatro Oculto**, compañía de artes escénicas con sede en La Ca
 
 - **URL:** https://github.com/SaraMarsDivino/PaginaWeb-TeatroOculto
 - **Rama principal:** `main`
-- **Último commit:** `441a94a` — Improve text contrast and iniciativas layout
+- **Último commit:** `478e0db` — assets(gallery): add gallery photos for both obras and reference docs
 - **Git config local:** user `SaraMarsDivino`, email `rochaulin2@gmail.com`
 
 ---
@@ -180,8 +180,18 @@ cast: string[]
 ```
 
 Obras actuales:
-1. `sobre-el-dano-que-causa-el-tabaco.md` — Estreno ago 2024
-2. `cuidado-con-el-vigilante.md` — Estreno mar 2025
+1. `sobre-el-dano-que-causa-el-tabaco.md` — Estreno ago 2024 · 55 min · 13 fotos en galería
+2. `cuidado-con-el-vigilante.md` — Estreno mar 2026 · 20 min · 16 fotos en galería
+
+**Textos:** aprobados por el cliente. Fuente original en `Obras - web teatro oculto.docx` (raíz del repo).
+
+**Obra pendiente (NO subir aún):** "Algo de Ricardo" — hay consultas de derechos de autor sin resolver.
+
+### Galería de imágenes
+Imágenes en `frontend/public/images/obras/{slug}/gallery/` — archivos `.JPG` y `.png`.
+- Nombres con espacios o paréntesis fueron renombrados con `_` (ej: `13 (1).JPG` → `13_1.JPG`).
+- Archivos `.CR2` (RAW) no son compatibles con web — exportar como JPG antes de agregar.
+- Al agregar fotos nuevas: copiar a la carpeta gallery correspondiente y agregar la ruta en el `.md` de la obra.
 
 ### Iniciativas
 Archivos en `frontend/src/content/iniciativas/*.md`
@@ -230,15 +240,18 @@ npm run dev -- --host
 - Nginx optimizado (gzip + cache + WebP condicional)
 - **Contraste de textos mejorado** — opacidad de cuerpo subida +20 en toda la web
 - **Iniciativas grid fix** — `items-start` evita que cards cerradas se estiren al abrir una vecina
+- **Textos de obras corregidos** — sinopsis, título y fechas aprobados por el cliente (sesión 2026-06-05)
+- **Galería de fotos** — 16 fotos en Vigilante, 13 en Tabaco. Rutas en cada `.md`
+- **Lightbox en galería** — clic en foto abre vista de pantalla completa con botón "Volver" y flechas ← → para navegar entre imágenes
 
 ### 🔲 Pendiente / por hacer
+- [ ] **Deploy al servidor** — `git pull` + `npm run build` + `restart nginx` en Raspberry Pi (pendiente desde 2026-06-05)
+- [ ] Convertir imágenes de galería a WebP en el servidor tras el deploy
 - [ ] Agregar más imágenes al carousel
-- [ ] Galería de fotos para cada obra (`public/images/obras/{slug}/gallery/`)
 - [ ] OG image para redes sociales (`public/images/brand/og-image.jpg`)
-- [ ] Optimizar imágenes con WebP también en local (para el build de git)
 - [ ] Dominio: verificar que `teatrooculto.cl` apunta correctamente al servidor
 - [ ] Decidir si eliminar/archivar el backend Django
-- [ ] Deploy de los últimos cambios al servidor (git pull + build en Raspberry Pi)
+- [ ] "Algo de Ricardo" — agregar cuando se resuelvan los derechos de autor
 
 ---
 
