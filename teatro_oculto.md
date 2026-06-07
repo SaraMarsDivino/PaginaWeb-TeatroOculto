@@ -243,15 +243,15 @@ npm run dev -- --host
 - **Textos de obras corregidos** — sinopsis, título y fechas aprobados por el cliente (sesión 2026-06-05)
 - **Galería de fotos** — 16 fotos en Vigilante, 13 en Tabaco. Rutas en cada `.md`
 - **Lightbox en galería** — clic en foto abre vista de pantalla completa con botón "Volver" y flechas ← → para navegar entre imágenes
+- **Deploy 2026-06-07** — git pull + npm run build + docker compose restart nginx en Raspberry Pi. Imágenes de galería convertidas a WebP con cwebp -q 82 en dist/ y redimensionadas a máximo 1920px con ImageMagick (reducción ~83% en peso, ej: 9_1.JPG pasó de 18MB → 419KB)
 
 ### 🔲 Pendiente / por hacer
-- [ ] **Deploy al servidor** — `git pull` + `npm run build` + `restart nginx` en Raspberry Pi (pendiente desde 2026-06-05)
-- [ ] Convertir imágenes de galería a WebP en el servidor tras el deploy
 - [ ] Agregar más imágenes al carousel
 - [ ] OG image para redes sociales (`public/images/brand/og-image.jpg`)
 - [ ] Dominio: verificar que `teatrooculto.cl` apunta correctamente al servidor
 - [ ] Decidir si eliminar/archivar el backend Django
 - [ ] "Algo de Ricardo" — agregar cuando se resuelvan los derechos de autor
+- [ ] **Nota deploy futuro**: tras cada `npm run build`, regenerar WebP (`cwebp -q 82`) y redimensionar (`convert -resize "1920x1920>"`) las imágenes nuevas en `dist/images/obras/`
 
 ---
 
