@@ -84,10 +84,7 @@ export default function ObrasGrid({ obras }: Props) {
               {obra.release_date && (
                 <p className="text-xs text-white/35 font-medium mb-3">
                   Estreno:{' '}
-                  {new Date(obra.release_date).toLocaleDateString('es-CL', {
-                    month: 'long',
-                    year: 'numeric',
-                  })}
+                  {(() => { const [y,m,d] = obra.release_date.split('-').map(Number); return new Date(y, m-1, d).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }); })()}
                 </p>
               )}
 
@@ -178,10 +175,7 @@ export default function ObrasGrid({ obras }: Props) {
                   {selected.release_date && (
                     <p className="text-xs text-white/40 font-medium uppercase tracking-widest mb-5">
                       Estreno:{' '}
-                      {new Date(selected.release_date).toLocaleDateString('es-CL', {
-                        month: 'long',
-                        year: 'numeric',
-                      })}
+                      {(() => { const [y,m,d] = selected.release_date.split('-').map(Number); return new Date(y, m-1, d).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }); })()}
                       {selected.duration && ` · ${selected.duration}`}
                     </p>
                   )}
