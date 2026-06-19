@@ -58,17 +58,17 @@ export default function HeroCarousel({ items, autoPlayMs = 5500 }: Props) {
   const current = items[index];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl" style={{ aspectRatio: '16/7' }}>
+    <div className="relative overflow-hidden rounded-3xl aspect-[4/3] sm:aspect-[16/9] md:aspect-[16/7]">
 
       {/* Edge fade — left */}
       <div
         className="absolute inset-y-0 left-0 z-20 pointer-events-none"
-        style={{ width: '120px', background: 'linear-gradient(to right, #060810 0%, transparent 100%)' }}
+        style={{ width: 'clamp(24px, 8vw, 120px)', background: 'linear-gradient(to right, #060810 0%, transparent 100%)' }}
       />
       {/* Edge fade — right */}
       <div
         className="absolute inset-y-0 right-0 z-20 pointer-events-none"
-        style={{ width: '120px', background: 'linear-gradient(to left, #060810 0%, transparent 100%)' }}
+        style={{ width: 'clamp(24px, 8vw, 120px)', background: 'linear-gradient(to left, #060810 0%, transparent 100%)' }}
       />
 
       {/* Slides */}
@@ -77,7 +77,7 @@ export default function HeroCarousel({ items, autoPlayMs = 5500 }: Props) {
           key={index}
           custom={direction}
           variants={reducedMotion ? {} : slideVariants}
-          initial="enter"
+          initial={index === 0 ? false : 'enter'}
           animate="center"
           exit="exit"
           className="absolute inset-0"
@@ -92,7 +92,9 @@ export default function HeroCarousel({ items, autoPlayMs = 5500 }: Props) {
               filter: 'contrast(1.1) saturate(1.05) brightness(1.1)',
               animation: reducedMotion ? undefined : 'ken-burns 10s ease-out both',
             }}
-            decoding="async"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : 'auto'}
+            decoding={index === 0 ? 'sync' : 'async'}
           />
 
           {/* Gradient overlays */}

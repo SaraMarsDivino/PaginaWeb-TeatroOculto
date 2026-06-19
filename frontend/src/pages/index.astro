@@ -20,6 +20,8 @@ const carouselItems = [
 ---
 
 <BaseLayout title="Teatro Oculto — Inicio">
+  <!-- Preload LCP: primera imagen del carrusel -->
+  <link slot="head" rel="preload" as="image" href="/images/carousel/ensayo 1.jpg" fetchpriority="high" />
   <Navbar slot="navbar" />
 
   <!-- 1. Hero with spotlight -->
