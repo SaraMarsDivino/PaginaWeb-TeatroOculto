@@ -18,7 +18,7 @@ Sitio web de **Teatro Oculto**, compañía de artes escénicas con sede en La Ca
 
 - **URL:** https://github.com/SaraMarsDivino/PaginaWeb-TeatroOculto
 - **Rama principal:** `main`
-- **Último commit:** `478e0db` — assets(gallery): add gallery photos for both obras and reference docs
+- **Último commit:** `67c8352` — fix(obras): parse release_date in local time to avoid UTC offset showing wrong month
 - **Git config local:** user `SaraMarsDivino`, email `rochaulin2@gmail.com`
 
 ---
@@ -180,7 +180,7 @@ cast: string[]
 ```
 
 Obras actuales:
-1. `sobre-el-dano-que-causa-el-tabaco.md` — Estreno ago 2024 · 55 min · 13 fotos en galería
+1. `sobre-el-dano-que-causa-el-tabaco.md` — Estreno mayo 2026 · 45 min · 13 fotos en galería
 2. `cuidado-con-el-vigilante.md` — Estreno mar 2026 · 20 min · 16 fotos en galería
 
 **Textos:** aprobados por el cliente. Fuente original en `Obras - web teatro oculto.docx` (raíz del repo).
@@ -244,14 +244,27 @@ npm run dev -- --host
 - **Galería de fotos** — 16 fotos en Vigilante, 13 en Tabaco. Rutas en cada `.md`
 - **Lightbox en galería** — clic en foto abre vista de pantalla completa con botón "Volver" y flechas ← → para navegar entre imágenes
 - **Deploy 2026-06-07** — git pull + npm run build + docker compose restart nginx en Raspberry Pi. Imágenes de galería convertidas a WebP con cwebp -q 82 en dist/ y redimensionadas a máximo 1920px con ImageMagick (reducción ~83% en peso, ej: 9_1.JPG pasó de 18MB → 419KB)
+- **Deploy 2026-06-09** — Obra "Sobre el daño...": fecha → mayo 2026, duración → 45 min. Eliminado párrafo descriptivo bajo título "Obras". Fix bug zona horaria en parseo de fechas (UTC → local) en ObrasGrid.tsx
+- **Sesión 2026-06-19 — Performance + Mobile fixes** (pendiente de deploy):
+  - `HeroCarousel.tsx`: primer slide arranca visible (`initial={false}` en `motion.div`) en vez de `opacity:0`. Agrega `fetchpriority="high"` y `loading="eager"` a la primera imagen. Aspect ratio responsivo: `4/3` mobile → `16/9` sm → `16/7` md. Fade lateral responsivo: `clamp(24px, 8vw, 120px)` en vez de 120px fijo.
+  - `BaseLayout.astro`: Google Fonts cambiado de `rel="stylesheet"` (bloqueante) a `rel="preload" as="style" onload=...` (asíncrono, ahorro ~1,480ms render-blocking). Agrega slot `<slot name="head">` para preloads por página.
+  - `index.astro`: `<link rel="preload" as="image" href="/images/carousel/ensayo 1.jpg" fetchpriority="high">` en `<head>` vía slot.
+  - `Navbar.astro`: Hamburguesa mobile corregida — líneas dentro de wrapper `<span class="flex flex-col items-start gap-[5px] w-5">` para alineación correcta. Animación X limpiada con `translateY(±6px) rotate(±45deg)`.
 
 ### 🔲 Pendiente / por hacer
+- [ ] **CRÍTICO — Deploy pendiente**: hacer `git push` + deploy en servidor (sesión 2026-06-19 tiene 4 archivos modificados listos)
+- [ ] **CRÍTICO — Imágenes carrusel en servidor**: convertir a WebP y redimensionar después del próximo deploy (son JPEGs sin optimizar de 3–7 MB cada uno, causa principal del LCP lento en producción):
+  ```bash
+  cd ~/teatro_project/frontend/dist/images/carousel
+  for f in *.jpg *.JPG; do convert "$f" -resize "1920x1920>" "$f"; done
+  for f in *.jpg *.JPG; do cwebp -q 82 "$f" -o "${f%.*}.webp"; done
+  ```
 - [ ] Agregar más imágenes al carousel
 - [ ] OG image para redes sociales (`public/images/brand/og-image.jpg`)
 - [ ] Dominio: verificar que `teatrooculto.cl` apunta correctamente al servidor
 - [ ] Decidir si eliminar/archivar el backend Django
 - [ ] "Algo de Ricardo" — agregar cuando se resuelvan los derechos de autor
-- [ ] **Nota deploy futuro**: tras cada `npm run build`, regenerar WebP (`cwebp -q 82`) y redimensionar (`convert -resize "1920x1920>"`) las imágenes nuevas en `dist/images/obras/`
+- [ ] **Nota deploy futuro**: tras cada `npm run build`, regenerar WebP (`cwebp -q 82`) y redimensionar (`convert -resize "1920x1920>"`) las imágenes nuevas en `dist/images/obras/` Y `dist/images/carousel/`
 
 ---
 
