@@ -26,8 +26,6 @@ gallery:
   - "/images/obras/cuidado-con-el-vigilante/gallery/IMG_5842.jpg"
 duration: "20 minutos"
 cast:
-  - "Pablo Valencia Fernández"
-  - "Estefania Villalobos"
   - "Fabián Zúñiga"
   - "Camila Estay Ancieta"
 ---

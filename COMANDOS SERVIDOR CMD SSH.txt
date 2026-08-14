@@ -1,0 +1,1 @@
+cd ~/teatro_project && git pull && cd frontend && npm run build && cd .. && docker compose restart nginx

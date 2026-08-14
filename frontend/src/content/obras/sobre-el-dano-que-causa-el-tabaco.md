@@ -23,5 +23,5 @@ gallery:
   - "/images/obras/sobre-el-dano-que-causa-el-tabaco/gallery/chejovvv.JPG"
 duration: "45 minutos (sin intermedio)"
 cast:
-  - "Pablo Valencia Fernández"
+  - "Fabián Zuñiga Valenzuela"
 ---
