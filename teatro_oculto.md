@@ -203,6 +203,13 @@ image: "/images/iniciativas/{filename}.png"
 order: number
 ```
 
+#### Historial de actualización: Conocer a nuestros públicos
+- **Fecha:** agosto de 2026
+- **Actualización:** incorporación de la iniciativa "Conocer a nuestros públicos" dentro de la sección de iniciativas del frontend Astro.
+- **Contexto:** se registró la experiencia de **¡Viva el Teatro! 2026**, con enfoque en estudio de públicos, análisis de asistencia, redes comunitarias y participación territorial en La Calera.
+- **Contenido agregado:** textos de contexto, datos cuantitativos, imagenes `publico-1.jpg` y `publico-2.jpg`, y video embebido de YouTube asociado a la iniciativa.
+- **Objetivo:** dejar un registro documental del trabajo de formación de públicos y del primer levantamiento de base de datos sobre participación, acceso y vinculación con la experiencia escénica.
+
 ### Equipo
 `frontend/src/data/equipo.ts` — Pablo Valencia Fernández, Estefania Villalobos, Fabián Zúñiga, Camila Estay Ancieta.
 
